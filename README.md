@@ -83,15 +83,19 @@ GitHub no está pensado para esto (recomendado <1 GB por repo, archivos <100 MB;
 
 ### Cómo se usa (Hugging Face)
 
-**Dar acceso (una vez, lo hace el responsable):**
+**Dar acceso (una vez, lo hace quien creó el dataset):**
 1. En el dataset → **Settings → Collaborators** → agregar a cada integrante de los 3 equipos por su usuario de Hugging Face (necesitan cuenta propia, gratis).
-2. Cada quien genera su token en https://huggingface.co/settings/tokens: el responsable uno con permiso **Write** (para subir), los demás con **Read** (para descargar).
+2. Rol de cada quien:
+   - **Write**: solo los **3 líderes de equipo** (igual que en GitHub) — son quienes suben las carpetas ya reunidas de su propio equipo.
+   - **Read**: el resto, solo para poder descargar con `descargar_datos.py` y entrenar su modelo.
+3. Cada quien genera su token en https://huggingface.co/settings/tokens, con el tipo (Write/Read) que le corresponda según su rol.
 
-**Subir datos (solo el responsable, cuando reúna las carpetas validadas de varios compañeros en su `data/` local):**
+**Subir datos (cada líder, con las carpetas de su propio equipo ya reunidas y validadas en su `data/` local):**
 ```bash
 hf auth login                 # pega tu token Write
 hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
 ```
+`hf upload` no borra lo que ya subieron los otros líderes — solo agrega/actualiza lo que esté en tu `data/` local, así que los 3 pueden subir por su cuenta sin pisarse.
 
 **Etiquetar una versión:**
 ```bash
@@ -158,17 +162,22 @@ garcia_juan,set_02,001.jpg
 
 > Alternativa sin instalar nada: [abre el notebook en Colab](https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb) — hace los pasos 2, 3 y 4 automáticamente (redimensionar, validar, generar metadata) y además te genera el `.zip` listo para descargar. (Si el link abre como vista previa de GitHub en vez de Colab, copia la URL y ábrela directo en el navegador, o usa el botón "Abrir en Colab" que está arriba del todo en el notebook.)
 
-### Paso a paso — responsable del dataset
+### Paso a paso — líderes de equipo (3 personas: tú + 2)
 
-1. Durante la fase de carga, da acceso de **colaborador** solo a los **2 líderes de los otros equipos** (Settings → Collaborators → Add people) — no a todo el salón. Cada líder reúne las líneas de metadata de su propio equipo (se las mandan sus compañeros) y las pega en `metadata.csv`. Si más adelante quieren que cada quien edite directo, se puede abrir el acceso a todos sin cambiar nada más del flujo.
-2. Recibe el `.zip` de cada compañero (directo o vía su líder) y revisa que `validar_dataset.py` no haya marcado errores.
-3. Descomprime cada `.zip` dentro de su `data/` local (debe quedar `data/apellido_nombre/set_01/...`).
-4. Cuando tenga varios compañeros reunidos, sube todo junto a Hugging Face:
+1. Durante la fase de carga, dense acceso de **Write** entre los 3 en ambos lugares — no a todo el salón todavía:
+   - **GitHub** (Settings → Collaborators → Add people) para editar `metadata.csv`.
+   - **Hugging Face** (dataset → Settings → Collaborators) para subir fotos. Ver [sección 4](#4-alojamiento-de-los-datos-10-20-gb-estimados-30000-fotos).
+   
+   Cada líder reúne los `.zip` y las líneas de metadata de su propio equipo (se las mandan sus compañeros) y hace su propia parte — no todo pasa por una sola persona. Si más adelante quieren que cada compañero suba/edite directo, se abre el acceso a todos sin cambiar nada más del flujo.
+2. Recibe el `.zip` de cada compañero de tu equipo y revisa que `validar_dataset.py` no haya marcado errores.
+3. Descomprime cada `.zip` dentro de tu `data/` local (debe quedar `data/apellido_nombre/set_01/...`, solo con la gente de tu equipo).
+4. Pega las líneas de metadata de tu equipo en `metadata.csv` (editor web de GitHub).
+5. Sube tu parte a Hugging Face:
    ```bash
    hf auth login
    hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
    ```
-5. Publica una nueva versión (tag):
+6. Cuando los 3 equipos ya subieron su parte, uno de los líderes publica la nueva versión (tag):
    ```bash
    hf repo tag create GadiGG/identificador-rostros-escom v1.0 --repo-type=dataset
    ```
