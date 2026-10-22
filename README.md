@@ -6,6 +6,7 @@ Repo **privado**, **solo de datos**, compartido por los 3 equipos de la práctic
 
 | Qué | Link |
 |---|---|
+| **Guía paso a paso (empieza aquí)** | [`GUIA_EQUIPO.md`](GUIA_EQUIPO.md) |
 | Repo (código + metadata) | https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM |
 | Notebook de Colab (prepara tus fotos sin instalar nada) | [Abrir en Colab](https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb) ([ver código](colab/Identificador_Rostros_Colab.ipynb)) |
 | Script: redimensionar fotos | [`scripts/redimensionar.py`](scripts/redimensionar.py) |
