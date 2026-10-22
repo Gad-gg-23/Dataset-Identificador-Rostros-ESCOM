@@ -1,0 +1,8 @@
+pillow>=10.0
+numpy>=1.24
+pandas>=2.0
+imagehash>=4.3
+tqdm>=4.66
+requests>=2.31
+huggingface_hub>=0.23
+facenet-pytorch>=2.5.3
