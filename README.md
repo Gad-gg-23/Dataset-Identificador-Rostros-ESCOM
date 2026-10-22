@@ -148,19 +148,20 @@ garcia_juan,set_02,001.jpg
    python scripts/validar_dataset.py --persona apellido_nombre
    ```
 4. Comprime a mano la carpeta resultante `data/apellido_nombre/` en un `.zip` (así: `apellido_nombre.zip` conteniendo `apellido_nombre/set_01/...`).
-5. Genera tus filas de metadata y agrégalas tú mismo — no hace falta esperar al responsable:
+5. Genera tus filas de metadata:
    ```
    python scripts/generar_metadata.py --persona apellido_nombre
    ```
-   Copia lo que imprime y pégalo al final de [`metadata.csv` (editor web de GitHub)](https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/edit/main/metadata.csv) → "Commit changes directly to the main branch". Para esto necesitas que el responsable te haya agregado antes como **colaborador** del repo (Settings → Collaborators → Add people, desde su cuenta) — es gratis y no requiere instalar git, el editor web alcanza.
-6. Entrega el `.zip` al responsable del dataset (Drive, WhatsApp, etc. — el `.zip` **nunca** se sube al repo de git).
+   - Si eres **colaborador** del repo, pégalas tú mismo al final de [`metadata.csv` (editor web de GitHub)](https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/edit/main/metadata.csv) → "Commit changes directly to the main branch".
+   - Si no, manda ese texto (junto con tu `.zip`) al **líder de tu equipo** — él lo pega por ti.
+6. Entrega el `.zip` al responsable del dataset o a tu líder de equipo (Drive, WhatsApp, etc. — el `.zip` **nunca** se sube al repo de git).
 
 > Alternativa sin instalar nada: [abre el notebook en Colab](https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb) — hace los pasos 2, 3 y 4 automáticamente (redimensionar, validar, generar metadata) y además te genera el `.zip` listo para descargar. (Si el link abre como vista previa de GitHub en vez de Colab, copia la URL y ábrela directo en el navegador, o usa el botón "Abrir en Colab" que está arriba del todo en el notebook.)
 
 ### Paso a paso — responsable del dataset
 
-1. Agrega a cada compañero como **colaborador** del repo (Settings → Collaborators → Add people) para que puedan editar `metadata.csv` ellos mismos — ya no hace falta que tú escribas esas filas.
-2. Recibe el `.zip` de cada compañero y revisa que `validar_dataset.py` no haya marcado errores.
+1. Durante la fase de carga, da acceso de **colaborador** solo a los **2 líderes de los otros equipos** (Settings → Collaborators → Add people) — no a todo el salón. Cada líder reúne las líneas de metadata de su propio equipo (se las mandan sus compañeros) y las pega en `metadata.csv`. Si más adelante quieren que cada quien edite directo, se puede abrir el acceso a todos sin cambiar nada más del flujo.
+2. Recibe el `.zip` de cada compañero (directo o vía su líder) y revisa que `validar_dataset.py` no haya marcado errores.
 3. Descomprime cada `.zip` dentro de su `data/` local (debe quedar `data/apellido_nombre/set_01/...`).
 4. Cuando tenga varios compañeros reunidos, sube todo junto a Hugging Face:
    ```bash
