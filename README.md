@@ -12,7 +12,7 @@ Repo **privado**, **solo de datos**, compartido por los 3 equipos de la práctic
 | Script: validar antes de entregar | [`scripts/validar_dataset.py`](scripts/validar_dataset.py) |
 | Script: recortar rostros (opcional) | [`scripts/recortar_rostros.py`](scripts/recortar_rostros.py) |
 | Script: descargar el dataset ya armado | [`descargar_datos.py`](descargar_datos.py) |
-| Subir tu .zip (Releases, solo responsable) | https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/releases/new |
+| Dataset (fotos, privado) | https://huggingface.co/datasets/GadiGG/identificador-rostros-escom |
 | Metadata del dataset | [`metadata.csv`](metadata.csv) |
 
 ## 1. Contexto de la práctica
@@ -77,9 +77,33 @@ GitHub no está pensado para esto (recomendado <1 GB por repo, archivos <100 MB;
 
 **Separar código y datos:**
 - **GitHub (este repo, privado):** README, scripts, `metadata.csv`.
-- **Datos:** Hugging Face Datasets en una organización/repo **privado** donde estén los 3 equipos.
-- **Alternativa:** un `.zip` por persona en GitHub Releases (hasta 2 GB por archivo) o en Drive, también en modo privado/restringido.
+- **Datos:** Hugging Face Datasets, repo **privado**: https://huggingface.co/datasets/GadiGG/identificador-rostros-escom
 - `descargar_datos.py` baja y descomprime todo en `data/`.
+
+### Cómo se usa (Hugging Face)
+
+**Dar acceso (una vez, lo hace el responsable):**
+1. En el dataset → **Settings → Collaborators** → agregar a cada integrante de los 3 equipos por su usuario de Hugging Face (necesitan cuenta propia, gratis).
+2. Cada quien genera su token en https://huggingface.co/settings/tokens: el responsable uno con permiso **Write** (para subir), los demás con **Read** (para descargar).
+
+**Subir datos (solo el responsable, cuando reúna las carpetas validadas de varios compañeros en su `data/` local):**
+```bash
+hf auth login                 # pega tu token Write
+hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
+```
+
+**Etiquetar una versión:**
+```bash
+hf repo tag create GadiGG/identificador-rostros-escom v1.0 --repo-type=dataset
+```
+
+**Descargar (cada equipo):**
+```bash
+hf auth login                 # con su propio token Read
+python descargar_datos.py --repo GadiGG/identificador-rostros-escom --version v1.0
+```
+
+> Nota: `hf` es el CLI nuevo de Hugging Face (antes `huggingface-cli`, sigue funcionando igual). `descargar_datos.py` usa internamente `huggingface_hub.snapshot_download`, ya incluido en `requirements.txt`.
 
 ## 5. Metadata
 
@@ -105,7 +129,7 @@ garcia_juan,set_02,001.jpg
    - Sin duplicados casi idénticos (hash perceptual).
    - Persona y sets presentes en `metadata.csv`.
    - Imprime reporte claro (OK / advertencia / error).
-4. **`descargar_datos.py`**: descarga desde Hugging Face (o Releases) y descomprime en `data/`, con opción de elegir versión (tag).
+4. **`descargar_datos.py`**: descarga desde Hugging Face y descomprime en `data/`, con opción de elegir versión (tag).
 
 ## 7. Flujo de trabajo del equipo
 
@@ -129,9 +153,18 @@ garcia_juan,set_02,001.jpg
 ### Paso a paso — responsable del dataset
 
 1. Recibe el `.zip` de cada compañero y revisa que `validar_dataset.py` no haya marcado errores.
-2. Sube el `.zip` como **asset** en un nuevo [GitHub Release](https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/releases/new) (no se sube al código, solo como archivo adjunto del release).
-3. Agrega las filas correspondientes en [`metadata.csv`](metadata.csv) (`persona,set_id,archivo`) y súbelas al repo normalmente (`git add metadata.csv && git commit && git push`).
-4. Cuando tenga a varios compañeros reunidos, publica el Release con un **tag de versión** (`v1.0`, `v1.1`...). Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa con [`descargar_datos.py`](descargar_datos.py).
+2. Descomprime cada `.zip` dentro de su `data/` local (debe quedar `data/apellido_nombre/set_01/...`).
+3. Cuando tenga varios compañeros reunidos, sube todo junto a Hugging Face:
+   ```bash
+   hf auth login
+   hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
+   ```
+4. Agrega las filas correspondientes en [`metadata.csv`](metadata.csv) (`persona,set_id,archivo`) y súbelas a este repo normalmente (`git add metadata.csv && git commit && git push`).
+5. Publica una nueva versión (tag):
+   ```bash
+   hf repo tag create GadiGG/identificador-rostros-escom v1.0 --repo-type=dataset
+   ```
+   Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa con [`descargar_datos.py`](descargar_datos.py). Detalle completo en la [sección 4](#4-alojamiento-de-los-datos-10-20-gb-estimados-30000-fotos).
 
 ## 8. Recomendación de uso (no es una regla)
 

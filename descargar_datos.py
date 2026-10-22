@@ -1,12 +1,14 @@
 """
 Descarga y descomprime el dataset en data/.
 
-Fuente por defecto: Hugging Face Datasets (repo privado).
-Requiere haber hecho login antes: huggingface-cli login (o variable HF_TOKEN).
+Fuente: Hugging Face Datasets (repo privado) - https://huggingface.co/datasets/GadiGG/identificador-rostros-escom
+Requiere haber hecho login antes: hf auth login (o variable HF_TOKEN).
 
 Uso:
-    python descargar_datos.py --repo mi-org/identificador-rostros-escom --version v1.0
-    python descargar_datos.py --zip "https://github.com/.../releases/download/v1.0/data.zip"
+    python descargar_datos.py --repo GadiGG/identificador-rostros-escom --version v1.0
+
+--zip queda como alternativa si en algún momento se reparte un .zip por otro medio (Drive, etc.):
+    python descargar_datos.py --zip "https://.../data.zip"
 """
 import argparse
 import sys
