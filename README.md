@@ -11,9 +11,10 @@ Repo **privado**, **solo de datos**, compartido por los 3 equipos de la práctic
 | Script: redimensionar fotos | [`scripts/redimensionar.py`](scripts/redimensionar.py) |
 | Script: validar antes de entregar | [`scripts/validar_dataset.py`](scripts/validar_dataset.py) |
 | Script: recortar rostros (opcional) | [`scripts/recortar_rostros.py`](scripts/recortar_rostros.py) |
+| Script: generar tus filas de metadata.csv | [`scripts/generar_metadata.py`](scripts/generar_metadata.py) |
 | Script: descargar el dataset ya armado | [`descargar_datos.py`](descargar_datos.py) |
 | Dataset (fotos, privado) | https://huggingface.co/datasets/GadiGG/identificador-rostros-escom |
-| Metadata del dataset | [`metadata.csv`](metadata.csv) |
+| Metadata del dataset (editar directo en GitHub) | [editar `metadata.csv`](https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/edit/main/metadata.csv) |
 
 ## 1. Contexto de la práctica
 
@@ -129,7 +130,8 @@ garcia_juan,set_02,001.jpg
    - Sin duplicados casi idénticos (hash perceptual).
    - Persona y sets presentes en `metadata.csv`.
    - Imprime reporte claro (OK / advertencia / error).
-4. **`descargar_datos.py`**: descarga desde Hugging Face y descomprime en `data/`, con opción de elegir versión (tag).
+4. **`scripts/generar_metadata.py`**: imprime (o guarda en un archivo) las filas de `metadata.csv` correspondientes a una persona, leyendo directo su carpeta `data/<persona>/`. Pensado para que cada compañero copie/pegue su parte sin tener que escribirla a mano ni usar git.
+5. **`descargar_datos.py`**: descarga desde Hugging Face y descomprime en `data/`, con opción de elegir versión (tag).
 
 ## 7. Flujo de trabajo del equipo
 
@@ -146,20 +148,25 @@ garcia_juan,set_02,001.jpg
    python scripts/validar_dataset.py --persona apellido_nombre
    ```
 4. Comprime a mano la carpeta resultante `data/apellido_nombre/` en un `.zip` (así: `apellido_nombre.zip` conteniendo `apellido_nombre/set_01/...`).
-5. Entrega ese `.zip` al responsable del dataset (Drive, WhatsApp, etc. — el `.zip` **nunca** se sube al repo de git).
+5. Genera tus filas de metadata y agrégalas tú mismo — no hace falta esperar al responsable:
+   ```
+   python scripts/generar_metadata.py --persona apellido_nombre
+   ```
+   Copia lo que imprime y pégalo al final de [`metadata.csv` (editor web de GitHub)](https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/edit/main/metadata.csv) → "Commit changes directly to the main branch". Para esto necesitas que el responsable te haya agregado antes como **colaborador** del repo (Settings → Collaborators → Add people, desde su cuenta) — es gratis y no requiere instalar git, el editor web alcanza.
+6. Entrega el `.zip` al responsable del dataset (Drive, WhatsApp, etc. — el `.zip` **nunca** se sube al repo de git).
 
-> Alternativa sin instalar nada: [abre el notebook en Colab](https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb) — hace los pasos 2-4 automáticamente: subes tus fotos originales a Google Drive y el notebook corre `redimensionar.py`, `validar_dataset.py` y te deja el `.zip` listo para descargar. (Si el link abre como vista previa de GitHub en vez de Colab, copia la URL y ábrela directo en el navegador, o usa el botón "Abrir en Colab" que está arriba del todo en el notebook.)
+> Alternativa sin instalar nada: [abre el notebook en Colab](https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb) — hace los pasos 2, 3 y 4 automáticamente (redimensionar, validar, generar metadata) y además te genera el `.zip` listo para descargar. (Si el link abre como vista previa de GitHub en vez de Colab, copia la URL y ábrela directo en el navegador, o usa el botón "Abrir en Colab" que está arriba del todo en el notebook.)
 
 ### Paso a paso — responsable del dataset
 
-1. Recibe el `.zip` de cada compañero y revisa que `validar_dataset.py` no haya marcado errores.
-2. Descomprime cada `.zip` dentro de su `data/` local (debe quedar `data/apellido_nombre/set_01/...`).
-3. Cuando tenga varios compañeros reunidos, sube todo junto a Hugging Face:
+1. Agrega a cada compañero como **colaborador** del repo (Settings → Collaborators → Add people) para que puedan editar `metadata.csv` ellos mismos — ya no hace falta que tú escribas esas filas.
+2. Recibe el `.zip` de cada compañero y revisa que `validar_dataset.py` no haya marcado errores.
+3. Descomprime cada `.zip` dentro de su `data/` local (debe quedar `data/apellido_nombre/set_01/...`).
+4. Cuando tenga varios compañeros reunidos, sube todo junto a Hugging Face:
    ```bash
    hf auth login
    hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
    ```
-4. Agrega las filas correspondientes en [`metadata.csv`](metadata.csv) (`persona,set_id,archivo`) y súbelas a este repo normalmente (`git add metadata.csv && git commit && git push`).
 5. Publica una nueva versión (tag):
    ```bash
    hf repo tag create GadiGG/identificador-rostros-escom v1.0 --repo-type=dataset
