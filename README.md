@@ -96,10 +96,13 @@ garcia_juan,set_02,001.jpg
 
 ## 7. Flujo de trabajo del equipo
 
-1. Cada compañero toma sus fotos por set y corre `scripts/redimensionar.py`.
-2. Corre `scripts/validar_dataset.py` en su carpeta.
-3. Entrega su zip al responsable del dataset.
-4. El responsable lo valida otra vez, lo sube, actualiza `metadata.csv` y publica un **tag de versión** (`v1.0`, `v1.1`...). Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa.
+1. Cada compañero toma sus fotos **originales** (sin procesar) y las organiza en `apellido_nombre/set_01/`, `set_02/`... (una carpeta por sesión de ropa).
+2. Corre `scripts/redimensionar.py` por cada set — esto genera la versión final en `data/<persona>/<set>/001.jpg, 002.jpg...` (normalizada, renombrada). **No comprime nada**, solo prepara las fotos.
+3. Corre `scripts/validar_dataset.py` sobre su carpeta ya generada.
+4. Comprime a mano la carpeta resultante `data/<persona>/` en un `.zip` y se lo entrega al responsable del dataset (Drive, WhatsApp, etc. — el `.zip` nunca se sube al repo de git).
+5. El responsable lo valida otra vez, lo sube como **asset de un GitHub Release**, actualiza `metadata.csv` y publica un **tag de versión** (`v1.0`, `v1.1`...). Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa.
+
+> Los pasos 1-4 se pueden hacer sin instalar nada localmente usando el notebook [`colab/Identificador_Rostros_Colab.ipynb`](colab/Identificador_Rostros_Colab.ipynb): subes tus fotos originales a Google Drive y el notebook corre `redimensionar.py`, `validar_dataset.py` y genera el `.zip` listo para descargar.
 
 ## 8. Recomendación de uso (no es una regla)
 
