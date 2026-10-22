@@ -2,6 +2,19 @@
 
 Repo **privado**, **solo de datos**, compartido por los 3 equipos de la práctica de Machine Learning (ESCOM).
 
+## Enlaces rápidos
+
+| Qué | Link |
+|---|---|
+| Repo (código + metadata) | https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM |
+| Notebook de Colab (prepara tus fotos sin instalar nada) | [`colab/Identificador_Rostros_Colab.ipynb`](colab/Identificador_Rostros_Colab.ipynb) |
+| Script: redimensionar fotos | [`scripts/redimensionar.py`](scripts/redimensionar.py) |
+| Script: validar antes de entregar | [`scripts/validar_dataset.py`](scripts/validar_dataset.py) |
+| Script: recortar rostros (opcional) | [`scripts/recortar_rostros.py`](scripts/recortar_rostros.py) |
+| Script: descargar el dataset ya armado | [`descargar_datos.py`](descargar_datos.py) |
+| Subir tu .zip (Releases, solo responsable) | https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/releases/new |
+| Metadata del dataset | [`metadata.csv`](metadata.csv) |
+
 ## 1. Contexto de la práctica
 
 - El día de la entrega el profesor tomará una foto a un compañero **elegido al azar** y le pondrá algún disfraz o accesorio (peluca, sombrero/gorra, lentes, maquillaje, bigote/barba postiza, bufanda, etc.). El modelo debe identificar **de quién se trata**.
@@ -96,13 +109,29 @@ garcia_juan,set_02,001.jpg
 
 ## 7. Flujo de trabajo del equipo
 
-1. Cada compañero toma sus fotos **originales** (sin procesar) y las organiza en `apellido_nombre/set_01/`, `set_02/`... (una carpeta por sesión de ropa).
-2. Corre `scripts/redimensionar.py` por cada set — esto genera la versión final en `data/<persona>/<set>/001.jpg, 002.jpg...` (normalizada, renombrada). **No comprime nada**, solo prepara las fotos.
-3. Corre `scripts/validar_dataset.py` sobre su carpeta ya generada.
-4. Comprime a mano la carpeta resultante `data/<persona>/` en un `.zip` y se lo entrega al responsable del dataset (Drive, WhatsApp, etc. — el `.zip` nunca se sube al repo de git).
-5. El responsable lo valida otra vez, lo sube como **asset de un GitHub Release**, actualiza `metadata.csv` y publica un **tag de versión** (`v1.0`, `v1.1`...). Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa.
+### Paso a paso — cada compañero (aporta sus fotos)
 
-> Los pasos 1-4 se pueden hacer sin instalar nada localmente usando el notebook [`colab/Identificador_Rostros_Colab.ipynb`](colab/Identificador_Rostros_Colab.ipynb): subes tus fotos originales a Google Drive y el notebook corre `redimensionar.py`, `validar_dataset.py` y genera el `.zip` listo para descargar.
+1. Toma tus fotos **originales** (sin procesar) y organízalas en `apellido_nombre/set_01/`, `set_02/`... (una carpeta por sesión de ropa).
+2. Corre [`scripts/redimensionar.py`](scripts/redimensionar.py) por cada set:
+   ```
+   python scripts/redimensionar.py --origen "<carpeta_del_set>" --persona apellido_nombre --set set_01
+   ```
+   Esto genera la versión final en `data/apellido_nombre/set_01/001.jpg, 002.jpg...` (normalizada, renombrada). **No comprime nada**, solo prepara las fotos.
+3. Corre [`scripts/validar_dataset.py`](scripts/validar_dataset.py) sobre tu carpeta ya generada:
+   ```
+   python scripts/validar_dataset.py --persona apellido_nombre
+   ```
+4. Comprime a mano la carpeta resultante `data/apellido_nombre/` en un `.zip` (así: `apellido_nombre.zip` conteniendo `apellido_nombre/set_01/...`).
+5. Entrega ese `.zip` al responsable del dataset (Drive, WhatsApp, etc. — el `.zip` **nunca** se sube al repo de git).
+
+> Alternativa sin instalar nada: el notebook [`colab/Identificador_Rostros_Colab.ipynb`](colab/Identificador_Rostros_Colab.ipynb) hace los pasos 2-4 automáticamente — subes tus fotos originales a Google Drive y el notebook corre `redimensionar.py`, `validar_dataset.py` y te deja el `.zip` listo para descargar.
+
+### Paso a paso — responsable del dataset
+
+1. Recibe el `.zip` de cada compañero y revisa que `validar_dataset.py` no haya marcado errores.
+2. Sube el `.zip` como **asset** en un nuevo [GitHub Release](https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/releases/new) (no se sube al código, solo como archivo adjunto del release).
+3. Agrega las filas correspondientes en [`metadata.csv`](metadata.csv) (`persona,set_id,archivo`) y súbelas al repo normalmente (`git add metadata.csv && git commit && git push`).
+4. Cuando tenga a varios compañeros reunidos, publica el Release con un **tag de versión** (`v1.0`, `v1.1`...). Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa con [`descargar_datos.py`](descargar_datos.py).
 
 ## 8. Recomendación de uso (no es una regla)
 
