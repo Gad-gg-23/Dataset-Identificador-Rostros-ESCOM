@@ -79,7 +79,6 @@ def main():
         advertencias.append(f"{duplicados} fotos parecen casi duplicadas (hash perceptual)")
 
     metadata_path = Path(args.metadata)
-    accesorios_variados = False
     if metadata_path.is_file():
         df = pd.read_csv(metadata_path)
         filas_persona = df[df["persona"] == args.persona]
@@ -91,14 +90,8 @@ def main():
             faltantes = sets_en_disco - sets_en_csv
             if faltantes:
                 errores.append(f"Sets en disco pero no en metadata.csv: {sorted(faltantes)}")
-            if "accesorios" in filas_persona.columns:
-                valores = set(filas_persona["accesorios"].dropna().str.lower())
-                accesorios_variados = any(v != "ninguno" for v in valores)
     else:
         advertencias.append(f"No se encontró {metadata_path}, se omite el cruce de información")
-
-    if metadata_path.is_file() and not accesorios_variados:
-        advertencias.append("Ningún set tiene accesorios/disfraz distinto de 'ninguno' en metadata.csv")
 
     print(f"--- Validación de '{args.persona}' ---")
     print(f"Sets encontrados: {len(sets)}")

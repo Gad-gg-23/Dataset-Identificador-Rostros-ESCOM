@@ -7,28 +7,27 @@ Repo **privado**, **solo de datos**, compartido por los 3 equipos de la práctic
 - El día de la entrega el profesor tomará una foto a un compañero **elegido al azar** y le pondrá algún disfraz o accesorio (peluca, sombrero/gorra, lentes, maquillaje, bigote/barba postiza, bufanda, etc.). El modelo debe identificar **de quién se trata**.
 - Se pueden usar **redes neuronales** (ventaja frente a ML clásico para este problema).
 - Son **3 equipos**, cada uno con su propio algoritmo/repo de código. Este repo **no tiene algoritmos**, solo datos.
-- El rostro es la señal principal, pero el modelo debe ser robusto a que esté parcialmente tapado o alterado por el disfraz — por eso las fotos de entrenamiento deben incluir disfraces variados, no solo ropa distinta.
+- El disfraz es la condición de **examen** (una sorpresa puntual, no sistemática): el dataset de entrenamiento debe ser mayormente fotos **limpias**, variadas en ropa/ángulo/fondo, para que el modelo aprenda rasgos faciales y de forma reales de la persona. No se busca entrenar "invariancia a disfraces" con volumen de fotos disfrazadas, sino que el modelo sea tan bueno reconociendo rasgos que el disfraz no le afecte.
 
 ## 2. Reglas de captura (por persona)
 
 | Parámetro | Valor recomendado |
 |---|---|
 | Fotos totales | ~1000-1100 (mínimo 1000) |
-| Sets | 8-10 sesiones distintas |
+| Sets | 8-10 sesiones distintas (cambio de ropa entre cada una) |
 | Fotos por set | ~110 |
-| Sets "limpios" (sin disfraz, solo variedad de ropa/ángulo) | al menos 4-5 de los sets |
-| Sets "con disfraz" | al menos 3-4 de los sets, cada uno con un accesorio distinto: gorra/sombrero, peluca, lentes (sol y graduados), maquillaje, bigote/barba postiza, bufanda o cubrebocas parcial |
-| Encuadre | mezclar cuerpo completo **y** medio cuerpo/rostro de cerca (el rostro necesita suficiente resolución, no solo fotos lejanas) |
+| Disfraz/accesorios | minoritario: como mucho 1 set (o una porción pequeña de fotos dentro de algún set) con gorra/lentes/similar, solo para variar de forma natural — no es el eje del dataset |
+| Encuadre | mayoría de 3/4 de cuerpo (rostro con buena resolución y suficiente contexto corporal) |
 | Ángulos | Frente, 3/4 izquierda y derecha, perfil, espalda |
 | Entornos | Interior y exterior, fondos e iluminación distintos |
 | Poses | De pie, caminando, brazos en distintas posiciones |
-| Rostro | Visible y nítido en la mayoría de las fotos (incluso en los sets con disfraz, que se vea al menos parcialmente) |
+| Rostro | Visible y nítido en la gran mayoría de las fotos |
 
 **Cómo tomarlas:** fotos directas con el celular (sin video), idealmente que otra persona las tome. Cambiar de pose, ángulo y distancia entre cada foto, evitando el modo ráfaga para no generar fotos casi idénticas. Cada set se puede dividir en 2-3 lugares para ganar variedad de fondo e iluminación.
 
 **Formato uniforme:** JPG calidad 90, ~768×1536 px (vertical) para las de cuerpo completo; las de rostro/medio cuerpo pueden ser más cuadradas, pero misma calidad. Nombres `001.jpg`, `002.jpg`, etc.
 
-> Importante: variedad de disfraz, ángulos y fondos pesa más que la cantidad. 1000 fotos sin ningún disfraz son casi inútiles para esta práctica — el objetivo es que el modelo aprenda a ignorar el disfraz, no solo distinguir ropa.
+> Importante: variedad de ropa, ángulos y fondos pesa más que la cantidad. El objetivo es que el modelo aprenda rasgos faciales/forma de la persona, no a asociarla con una prenda o un fondo — por eso 1000 fotos con 2 outfits son peores que 300 con 10.
 
 ## 3. Estructura del repo
 
@@ -74,40 +73,37 @@ GitHub no está pensado para esto (recomendado <1 GB por repo, archivos <100 MB;
 **`metadata.csv`** (una fila por imagen):
 
 ```
-persona,set_id,accesorios,archivo
-garcia_juan,set_01,ninguno,001.jpg
-garcia_juan,set_02,gorra,001.jpg
+persona,set_id,archivo
+garcia_juan,set_01,001.jpg
+garcia_juan,set_02,001.jpg
 ```
 
-- `accesorios`: texto libre por **set** (no por foto), ej. `ninguno`, `gorra`, `peluca`, `lentes`, `peluca+lentes`. Sirve para que cada equipo pueda medir qué tan robusto es su modelo ante cada tipo de disfraz, y es el único dato "extra" que vale la pena etiquetar — ángulo, entorno y fecha no se etiquetan: la variedad se logra al **capturar**, no al etiquetar.
+- No se etiqueta ángulo, entorno, fecha ni disfraz: la variedad se logra al **capturar** (cambiar de pose, ángulo y fondo entre fotos), no al etiquetar. El disfraz es la excepción puntual del día del examen, no una categoría del dataset que haya que balancear o marcar.
 - El repo **no define splits de train/val/test**: cada equipo usa los datos como quiera.
 
 ## 6. Scripts
 
 1. **`scripts/redimensionar.py`**: recibe una carpeta de fotos originales del celular (persona + set), las convierte a JPG calidad 90, ajusta tamaño manteniendo proporción, corrige orientación EXIF y las renombra a `001.jpg`, `002.jpg`... en `data/<persona>/<set>/`.
-2. **`scripts/recortar_rostros.py`**: detecta el rostro con MTCNN (`facenet-pytorch`) y guarda recortes en `faces/`. Registra las fotos donde no se detectó rostro (fotos con disfraz que tapa demasiado, de espalda, etc.) para que el equipo decida si las usa igual.
+2. **`scripts/recortar_rostros.py`**: detecta el rostro con MTCNN (`facenet-pytorch`) y guarda recortes en `faces/`. Registra las fotos donde no se detectó rostro (de espalda, mal ángulo, etc.) para que el equipo decida si las usa igual.
 3. **`scripts/validar_dataset.py`**: por persona, verifica:
    - Nombre de carpeta válido (sin acentos ni espacios).
    - Mínimo 8 sets y ~1000 imágenes.
    - Todas las imágenes abren bien, formato y tamaño correctos.
    - Sin duplicados casi idénticos (hash perceptual).
    - Persona y sets presentes en `metadata.csv`.
-   - Al menos un set marcado con algún accesorio distinto de `ninguno` (si no, avisa que falta variedad de disfraz).
    - Imprime reporte claro (OK / advertencia / error).
 4. **`descargar_datos.py`**: descarga desde Hugging Face (o Releases) y descomprime en `data/`, con opción de elegir versión (tag).
 
 ## 7. Flujo de trabajo del equipo
 
-1. Cada compañero toma sus fotos por set (mezclando sets limpios y con disfraz) y corre `scripts/redimensionar.py`.
+1. Cada compañero toma sus fotos por set y corre `scripts/redimensionar.py`.
 2. Corre `scripts/validar_dataset.py` en su carpeta.
 3. Entrega su zip al responsable del dataset.
 4. El responsable lo valida otra vez, lo sube, actualiza `metadata.csv` y publica un **tag de versión** (`v1.0`, `v1.1`...). Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa.
 
 ## 8. Recomendación de uso (no es una regla)
 
-Cada equipo decide cómo dividir y usar los datos. Dos consejos para que los resultados sean confiables:
-- **Si dividen en train/val/test, háganlo por set, no por foto al azar.** Si el mismo set queda en train y en test, el modelo parece excelente en la práctica pero falla el día del examen.
-- **Aseguren que tanto train como test tengan sets con y sin disfraz.** Si todo el disfraz queda solo en test, no hay forma de medir si el modelo realmente generalizó.
+Cada equipo decide cómo dividir y usar los datos. Un consejo para que los resultados sean confiables: **si dividen en train/val/test, háganlo por set (por ropa) y no por foto al azar.** Si el mismo set queda en train y en test, el modelo parece excelente en la práctica pero falla con ropa nueva el día del examen.
 
 ## 9. Privacidad y consentimiento
 
