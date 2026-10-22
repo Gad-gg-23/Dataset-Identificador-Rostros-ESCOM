@@ -7,7 +7,7 @@ Repo **privado**, **solo de datos**, compartido por los 3 equipos de la práctic
 | Qué | Link |
 |---|---|
 | Repo (código + metadata) | https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM |
-| Notebook de Colab (prepara tus fotos sin instalar nada) | [`colab/Identificador_Rostros_Colab.ipynb`](colab/Identificador_Rostros_Colab.ipynb) |
+| Notebook de Colab (prepara tus fotos sin instalar nada) | [Abrir en Colab](https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb) ([ver código](colab/Identificador_Rostros_Colab.ipynb)) |
 | Script: redimensionar fotos | [`scripts/redimensionar.py`](scripts/redimensionar.py) |
 | Script: validar antes de entregar | [`scripts/validar_dataset.py`](scripts/validar_dataset.py) |
 | Script: recortar rostros (opcional) | [`scripts/recortar_rostros.py`](scripts/recortar_rostros.py) |
@@ -148,7 +148,7 @@ garcia_juan,set_02,001.jpg
 4. Comprime a mano la carpeta resultante `data/apellido_nombre/` en un `.zip` (así: `apellido_nombre.zip` conteniendo `apellido_nombre/set_01/...`).
 5. Entrega ese `.zip` al responsable del dataset (Drive, WhatsApp, etc. — el `.zip` **nunca** se sube al repo de git).
 
-> Alternativa sin instalar nada: el notebook [`colab/Identificador_Rostros_Colab.ipynb`](colab/Identificador_Rostros_Colab.ipynb) hace los pasos 2-4 automáticamente — subes tus fotos originales a Google Drive y el notebook corre `redimensionar.py`, `validar_dataset.py` y te deja el `.zip` listo para descargar.
+> Alternativa sin instalar nada: [abre el notebook en Colab](https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb) — hace los pasos 2-4 automáticamente: subes tus fotos originales a Google Drive y el notebook corre `redimensionar.py`, `validar_dataset.py` y te deja el `.zip` listo para descargar. (Si el link abre como vista previa de GitHub en vez de Colab, copia la URL y ábrela directo en el navegador, o usa el botón "Abrir en Colab" que está arriba del todo en el notebook.)
 
 ### Paso a paso — responsable del dataset
 
