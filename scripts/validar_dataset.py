@@ -15,7 +15,8 @@ from PIL import Image
 
 MIN_SETS = 8
 MIN_FOTOS = 1000
-TAMANO_MIN = (400, 400)
+AREA_MIN = 400 * 400  # resolución mínima total, sin importar orientación
+LADO_MIN = 200  # evita tiras extremadamente delgadas (panorámicas, recortes raros)
 UMBRAL_HASH_DUPLICADO = 3  # distancia de Hamming entre hashes perceptuales
 
 
@@ -61,7 +62,8 @@ def main():
             with Image.open(foto) as img:
                 img.verify()
             with Image.open(foto) as img:
-                if img.width < TAMANO_MIN[0] or img.height < TAMANO_MIN[1]:
+                lado_corto = min(img.width, img.height)
+                if img.width * img.height < AREA_MIN or lado_corto < LADO_MIN:
                     fotos_invalidas += 1
                     continue
                 h = imagehash.phash(img)
