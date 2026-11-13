@@ -1,6 +1,6 @@
 data/
 faces/
-mis_fotos_originales/
+mis_fotos_originales*/
 __pycache__/
 *.pyc
 *.zip
