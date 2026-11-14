@@ -14,7 +14,7 @@ Repo **privado**, **solo de datos**, compartido por los 3 equipos de la práctic
 | Script: recortar rostros (opcional) | [`scripts/recortar_rostros.py`](scripts/recortar_rostros.py) |
 | Script: generar tus filas de metadata.csv | [`scripts/generar_metadata.py`](scripts/generar_metadata.py) |
 | Script: descargar el dataset ya armado | [`descargar_datos.py`](descargar_datos.py) |
-| Dataset (fotos, privado) | https://huggingface.co/datasets/GadiGG/identificador-rostros-escom |
+| Dataset (fotos, privado) | https://huggingface.co/datasets/escom-identificador-rostros/identificador-rostros-escom |
 | Metadata del dataset (editar directo en GitHub) | [editar `metadata.csv`](https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/edit/main/metadata.csv) |
 
 ## 1. Contexto de la práctica
@@ -79,7 +79,7 @@ GitHub no está pensado para esto (recomendado <1 GB por repo, archivos <100 MB;
 
 **Separar código y datos:**
 - **GitHub (este repo, privado):** README, scripts, `metadata.csv`.
-- **Datos:** Hugging Face Datasets, repo **privado**: https://huggingface.co/datasets/GadiGG/identificador-rostros-escom
+- **Datos:** Hugging Face Datasets, repo **privado**: https://huggingface.co/datasets/escom-identificador-rostros/identificador-rostros-escom
 - `descargar_datos.py` baja y descomprime todo en `data/`.
 
 ### Cómo se usa (Hugging Face)
@@ -94,19 +94,19 @@ GitHub no está pensado para esto (recomendado <1 GB por repo, archivos <100 MB;
 **Subir datos (cada líder, con las carpetas de su propio equipo ya reunidas y validadas en su `data/` local):**
 ```bash
 hf auth login                 # pega tu token Write
-hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
+hf upload escom-identificador-rostros/identificador-rostros-escom ./data --repo-type=dataset
 ```
 `hf upload` no borra lo que ya subieron los otros líderes — solo agrega/actualiza lo que esté en tu `data/` local, así que los 3 pueden subir por su cuenta sin pisarse.
 
 **Etiquetar una versión:**
 ```bash
-hf repo tag create GadiGG/identificador-rostros-escom v1.0 --repo-type=dataset
+hf repo tag create escom-identificador-rostros/identificador-rostros-escom v1.0 --repo-type=dataset
 ```
 
 **Descargar (cada equipo):**
 ```bash
 hf auth login                 # con su propio token Read
-python descargar_datos.py --repo GadiGG/identificador-rostros-escom --version v1.0
+python descargar_datos.py --repo escom-identificador-rostros/identificador-rostros-escom --version v1.0
 ```
 
 > Nota: `hf` es el CLI nuevo de Hugging Face (antes `huggingface-cli`, sigue funcionando igual). `descargar_datos.py` usa internamente `huggingface_hub.snapshot_download`, ya incluido en `requirements.txt`.
@@ -176,11 +176,11 @@ garcia_juan,set_02,001.jpg
 5. Sube tu parte a Hugging Face:
    ```bash
    hf auth login
-   hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
+   hf upload escom-identificador-rostros/identificador-rostros-escom ./data --repo-type=dataset
    ```
 6. Cuando los 3 equipos ya subieron su parte, uno de los líderes publica la nueva versión (tag):
    ```bash
-   hf repo tag create GadiGG/identificador-rostros-escom v1.0 --repo-type=dataset
+   hf repo tag create escom-identificador-rostros/identificador-rostros-escom v1.0 --repo-type=dataset
    ```
    Nadie cambia datos a media práctica sin avisar: cada equipo fija la versión que usa con [`descargar_datos.py`](descargar_datos.py). Detalle completo en la [sección 4](#4-alojamiento-de-los-datos-10-20-gb-estimados-30000-fotos).
 

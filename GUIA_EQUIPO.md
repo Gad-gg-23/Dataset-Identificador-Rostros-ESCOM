@@ -7,7 +7,7 @@ Esta guía es para los **3 líderes de equipo** y para **cada compañero** que v
 | Qué | Link |
 |---|---|
 | Repo de código (GitHub, privado) | https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM |
-| Dataset de fotos (Hugging Face, privado) | https://huggingface.co/datasets/GadiGG/identificador-rostros-escom |
+| Dataset de fotos (Hugging Face, privado) | https://huggingface.co/datasets/escom-identificador-rostros/identificador-rostros-escom |
 | Notebook de Colab | https://colab.research.google.com/github/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/blob/main/colab/Identificador_Rostros_Colab.ipynb |
 | Editar `metadata.csv` directo en el navegador | https://github.com/Gad-gg-23/Dataset-Identificador-Rostros-ESCOM/edit/main/metadata.csv |
 | Generar token de GitHub | https://github.com/settings/tokens |
@@ -150,7 +150,7 @@ Por cada compañero que te mandó sus líneas (y las tuyas propias):
 ```bash
 pip install -U huggingface_hub   # si no lo tienes instalado
 hf auth login                    # pega tu token con permiso Write
-hf upload GadiGG/identificador-rostros-escom ./data --repo-type=dataset
+hf upload escom-identificador-rostros/identificador-rostros-escom ./data --repo-type=dataset
 ```
 
 Esto sube **solo lo que está en tu carpeta `data/` local** (tu equipo). No borra ni toca lo que ya subieron los otros 2 líderes, así que los 3 pueden hacer esto por su cuenta sin coordinarse en el momento exacto.
@@ -164,13 +164,13 @@ Cuando termines, avísales (chat del grupo) que ya subiste tu equipo completo, p
 Cualquiera de los 3 líderes corre (una sola vez, cuando ya esté todo reunido):
 
 ```bash
-hf repo tag create GadiGG/identificador-rostros-escom v1.0 --repo-type=dataset
+hf repo tag create escom-identificador-rostros/identificador-rostros-escom v1.0 --repo-type=dataset
 ```
 
 Avisen a todo el salón qué versión (`v1.0`, `v1.1`...) usar para descargar y entrenar:
 
 ```bash
-python descargar_datos.py --repo GadiGG/identificador-rostros-escom --version v1.0
+python descargar_datos.py --repo escom-identificador-rostros/identificador-rostros-escom --version v1.0
 ```
 
 ### 2.8 Si más adelante van a entrenar modelos (cada equipo)
