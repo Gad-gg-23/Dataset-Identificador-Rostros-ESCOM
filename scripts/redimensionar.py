@@ -11,6 +11,12 @@ from pathlib import Path
 
 from PIL import Image, ImageOps
 
+try:
+    from pillow_heif import register_heif_opener
+    register_heif_opener()
+except ImportError:
+    pass  # fotos .heic/.heif fallaran si falta "pip install pillow-heif"
+
 EXTENSIONES_VALIDAS = {".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp"}
 ANCHO_OBJETIVO = 768
 ALTO_OBJETIVO = 1536
